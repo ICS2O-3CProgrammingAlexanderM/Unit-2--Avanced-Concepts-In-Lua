@@ -3,7 +3,7 @@
 -- Created by: Gil Robern
 -- Modified by: Alexander
 -- Date: Month Day, Year
--- Description: This shows the player that they lost the game and plays a booing sound.
+-- Description: This shows the player that they won the game and plays a win sound.
 -----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ local widget = require( "widget" )
 -----------------------------------------------------------------------------------------
 
 -- Naming Scene
-sceneName = "you_lose"
+sceneName = "you_win"
 
 -----------------------------------------------------------------------------------------
 
@@ -31,8 +31,8 @@ local scene = composer.newScene( sceneName )
 
 -- local variables for the scene
 local bkg
-local loseSounds = audio.loadSound("Sounds/Kids Booing.mp3")
-local loseSoundsChannel
+local winSounds = audio.loadSound("Sounds/youWinSound.wav")
+local winSoundsChannel
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -50,7 +50,7 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -- Display background
-    bkg = display.newImage("Images/You Lose.png")
+    bkg = display.newImage("Images/You Win Screen.png")
     bkg.x = display.contentCenterX
     bkg.y = display.contentCenterY
     bkg.width = display.contentWidth
@@ -82,11 +82,9 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
 
-        -- start the lose screen sounds
-        loseSoundsChannel = audio.play( loseSounds )
-
+        -- start the win screen music
+        winSoundsChannel = audio.play( winSounds {loops = -1} )
     end
-
 end
 
 -----------------------------------------------------------------------------------------
@@ -145,4 +143,3 @@ scene:addEventListener( "destroy", scene )
 -----------------------------------------------------------------------------------------
 
 return scene
-
