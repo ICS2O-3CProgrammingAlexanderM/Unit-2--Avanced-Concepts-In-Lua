@@ -89,10 +89,16 @@ local alreadyClickedAnswer = false
 -- SOUND
 -----------------------------------------------------------------------------------------
 
---incorrect SOUND
-local incorrectSound = ("Sounds/WrongBuzzer.mp3")
+--incorrect sound
+local incorrectSound = audio.loadStream("Sounds/WrongBuzzer.mp3")
 local incorrectSoundChannel
+--correct sound
+local correctSound = audio.loadStream("Sounds/CorrectAnswer.mp3")
+local correctSoundChannel
 
+--background music
+local Music = audio.loadSound("Sounds/level1Music.mp3")
+local MusicChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -116,30 +122,30 @@ local function DisplayAnswers( )
 
     if (answerPosition == 1) then
         
-        answerTextObject.x = display.contentWidth*.3
-        wrongAnswer1TextObject.x = display.contentWidth*.1
-        wrongAnswer2TextObject.x = display.contentWidth*.4
-        wrongAnswer3TextObject.x = display.contentWidth*.2
+        answerTextObject.x = display.contentWidth/2-100
+        wrongAnswer1TextObject.x = display.contentWidth/2-200
+        wrongAnswer2TextObject.x = display.contentWidth/2+100
+        wrongAnswer3TextObject.x = display.contentWidth/2
 
     elseif (answerPosition == 2) then
        
-        answerTextObject.x = display.contentWidth*.2
-        wrongAnswer1TextObject.x = display.contentWidth*.1
-        wrongAnswer2TextObject.x = display.contentWidth*.3 
-        wrongAnswer3TextObject.x = display.contentWidth*.4
+        answerTextObject.x = display.contentWidth/2-100
+        wrongAnswer1TextObject.x = display.contentWidth/2-200
+        wrongAnswer2TextObject.x = display.contentWidth/2
+        wrongAnswer3TextObject.x = display.contentWidth/2+100
 
     elseif (answerPosition == 3) then
        
-        answerTextObject.x = display.contentWidth*.1
-        wrongAnswer1TextObject.x = display.contentWidth*.2
-        wrongAnswer2TextObject.x = display.contentWidth*.3
-        wrongAnswer3TextObject = display.contentWidth*.4
+        answerTextObject.x = display.contentWidth/2-200
+        wrongAnswer1TextObject.x = display.contentWidth/2-100
+        wrongAnswer2TextObject.x = display.contentWidth/2
+        wrongAnswer3TextObject.x = display.contentWidth/2+100
 
     elseif (answerPosition == 4) then
-        answerTextObject.x = display.contentWidth*.4
-        wrongAnswer1TextObject.x = display.contentWidth*.3
-        wrongAnswer2TextObject.x = display.contentWidth*.2
-        wrongAnswer3TextObject.x = display.contentWidth*.1
+        answerTextObject.x = display.contentWidth/2+100
+        wrongAnswer1TextObject.x = display.contentWidth/2
+        wrongAnswer2TextObject.x = display.contentWidth/2-100
+        wrongAnswer3TextObject.x = display.contentWidth/2-200
     end
 end
 
@@ -167,8 +173,6 @@ local function DisplayAddEquation()
 
     -- displays text on text object
     addEquationTextObject.text = addEquationString
-
-    
 end
 
 
@@ -196,6 +200,7 @@ end
 local function TouchListenerAnswer(touch)
     -- get the user answer from the text object that was clicked on
     local userAnswer = answerTextObject.text
+    correctSoundChannel = audio.play(correctSound, {channel = 2, loops = 0, fadein = 0})
 
     if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
 
@@ -216,6 +221,7 @@ end
 local function TouchListenerWrongAnswer1(touch)
     -- get the user answer from the text object that was clicked on
     local userAnswer = wrongAnswer1TextObject.text
+    incorrectSoundChannel = audio.play(incorrectSound, {channel = 1, loops = 0, fadein = 0})
 
     if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
 
@@ -236,6 +242,7 @@ end
 local function TouchListenerWrongAnswer2(touch)
     -- get the user answer from the text object that was clicked on
     local userAnswer = wrongAnswer2TextObject.text
+    incorrectSoundChannel = audio.play(incorrectSound, {channel = 1, loops = 0, fadein = 0})
 
       
     if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
@@ -257,6 +264,7 @@ end
 local function TouchListenerWrongAnswer3(touch)
     -- get the user answer from the text object that was clicked on
     local userAnswer = wrongAnswer3TextObject.text
+    incorrectSoundChannel = audio.play(incorrectSound, {channel = 1, loops = 0, fadein = 0})
 
       
     if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
@@ -321,16 +329,16 @@ function scene:create( event )
     bkg.height = display.contentHeight
 
     -- create the text object that will hold the add equation. Make it empty for now.
-    addEquationTextObject = display.newText( "", display.contentWidth*1/4, display.contentHeight*2/5, nil, 50 )
+    addEquationTextObject = display.newText( "", display.contentWidth/2, display.contentHeight*2/5, nil, 70 )
 
     -- sets the color of the add equation text object
     addEquationTextObject:setTextColor(155/255, 42/255, 198/255)
 
     -- create the text objects that will hold the correct answer and the wrong answers
-    answerTextObject = display.newText("", display.contentWidth*.4, display.contentHeight/2, nil, 50 )
-    wrongAnswer1TextObject = display.newText("", display.contentWidth*.3, display.contentHeight/2, nil, 50 )
-    wrongAnswer2TextObject = display.newText("", display.contentWidth*.2, display.contentHeight/2, nil, 50 )
-    wrongAnswer3TextObject = display.newText("", display.contentWidth*.1, display.contentHeight/2, nil, 50 )
+    answerTextObject = display.newText("", display.contentWidth/2+10, display.contentHeight/2, nil, 70 )
+    wrongAnswer1TextObject = display.newText("", display.contentWidth/2-10, display.contentHeight/2, nil, 70 )
+    wrongAnswer2TextObject = display.newText("", display.contentWidth/2+20, display.contentHeight/2, nil, 70 )
+    wrongAnswer3TextObject = display.newText("", display.contentWidth/2-20, display.contentHeight/2, nil, 70 )
     numberCorrectText = display.newText("", display.contentWidth*4/5, display.contentHeight*6/7, nil, 25)
 
     -- create the text object that will hold the number of lives
@@ -401,6 +409,9 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+
+        --play music
+        MusicChannel = audio.play( Music, {channel = 3, loops = -1, fadein=0})
 
         -- initialize the number of lives and number correct 
         lives = 2
