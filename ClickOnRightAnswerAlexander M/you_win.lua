@@ -31,7 +31,7 @@ local scene = composer.newScene( sceneName )
 
 -- local variables for the scene
 local bkg
-local winSounds = audio.loadSound("Sounds/youWinSound.wav")
+local winSounds = audio.loadStream("Sounds/youWinSound.wav")
 local winSoundsChannel
 
 -----------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ function scene:show( event )
     elseif ( phase == "did" ) then
 
         -- start the win screen music
-        winSoundsChannel = audio.play( winSounds {loops = -1} )
+        winSoundsChannel = audio.play( winSounds, {channel =1, loops = -1, fadein = 0} )
     end
 end
 

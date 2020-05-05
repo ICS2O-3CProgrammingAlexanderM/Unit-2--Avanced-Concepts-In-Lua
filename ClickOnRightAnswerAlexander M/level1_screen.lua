@@ -450,6 +450,7 @@ function scene:hide( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+        audio.stop()
     end
 
 end
@@ -459,9 +460,11 @@ end
 -- The function called when the scene is issued to be destroyed
 function scene:destroy( event )
 
+    --stop the sound
+    audio.stop()
+
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
-
     -----------------------------------------------------------------------------------------
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
